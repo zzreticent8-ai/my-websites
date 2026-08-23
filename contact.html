@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact | The GreenHouseSheShed Stories</title>
+<meta name="description" content="Say hello to Kim Wild — find The GreenHouseSheShed Stories on Facebook and Instagram, or send a message.">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🌿</text></svg>">
+<link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+<header class="site-header">
+  <nav class="nav">
+    <a href="index.html" class="logo"><span class="leaf">🌿</span> The GreenHouseSheShed</a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="books.html">Books</a></li>
+      <li><a href="about.html">About Kim</a></li>
+      <li><a href="contact.html" class="active">Contact</a></li>
+      <li><a href="https://books.by/kimwild" target="_blank" rel="noopener" class="btn btn-gold btn-small">Shop the Books</a></li>
+    </ul>
+    <button class="nav-toggle" aria-label="Toggle menu" aria-expanded="false">☰</button>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">Say Hello</p>
+    <h1>Get In Touch</h1>
+    <p>Questions, school visits, press, or just want to share the magic? We'd love to hear from you.</p>
+  </div>
+</section>
+
+<section>
+  <div class="container contact-grid">
+    <form class="contact-form">
+      <div>
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" required>
+      </div>
+      <div>
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" required>
+      </div>
+      <div>
+        <label for="message">Message</label>
+        <textarea id="message" name="message" required></textarea>
+      </div>
+      <button type="submit" class="btn btn-gold">Send Message</button>
+    </form>
+
+    <div class="social-panel">
+      <p class="eyebrow" style="display:block">Find the Grove Online</p>
+      <h2 class="section-title" style="font-size:1.6rem">Follow Along</h2>
+      <ul class="social-list">
+        <li><a href="https://facebook.com/thegreenhousesheshed" target="_blank" rel="noopener"><span class="icon">📘</span> Facebook — thegreenhousesheshed</a></li>
+        <li><a href="https://instagram.com/byKimWild" target="_blank" rel="noopener"><span class="icon">📸</span> Instagram — @byKimWild</a></li>
+        <li><a href="https://books.by/kimwild" target="_blank" rel="noopener"><span class="icon">📚</span> Shop — Books.by/kimwild</a></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-logo">🌿 The GreenHouseSheShed</div>
+        <p>Gentle, magical picture books by Kim Wild — created with love and patience in Montana.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="books.html">Books</a></li>
+          <li><a href="about.html">About Kim</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Connect</h4>
+        <ul>
+          <li><a href="https://books.by/kimwild" target="_blank" rel="noopener">Shop: Books.by/kimwild</a></li>
+          <li><a href="https://facebook.com/thegreenhousesheshed" target="_blank" rel="noopener">Facebook</a></li>
+          <li><a href="https://instagram.com/byKimWild" target="_blank" rel="noopener">Instagram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">&copy; <span id="year"></span> The GreenHouseSheShed Stories · Kim Wild. All rights reserved.</div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
