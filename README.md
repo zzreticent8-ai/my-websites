@@ -17,7 +17,7 @@ The site ships with styled placeholder covers (title + icon on a gradient) so it
 
 | File | Used for |
 |---|---|
-| `assets/images/author-kim-wild.jpg` | Author headshot (Home + About) |
+| `assets/images/author-kim-wild.webp` | Author headshot (Home + About) |
 | `assets/images/covers/book-1-the-magical-world.jpg` | Book 1 — The Magical World in The GreenHouseSheShed |
 | `assets/images/covers/book-2-miss-bluebeary.jpg` | Book 2 — Miss Bluebeary Moves In Next Door |
 | `assets/images/covers/book-3-nighttime-magic.jpg` | Book 3 — Nighttime Magic in The GreenHouseSheShed |
