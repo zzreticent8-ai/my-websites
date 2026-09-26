@@ -62,6 +62,9 @@ booking request → "Booked ✓" → calendar filling; DM → auto-reply → inb
 
 - **Surprise marks** (`#wow`): four short rounded strokes at the reactor's temples,
   `scaleY` from 0 with `back.out(3)`, 0.03 s stagger, fade at +0.55 s. Rise SFX.
+- **Bursts belong to their shot.** Place sparkles/hearts for the shot they appear in and
+  finish them by that shot's cut (fade at `cut - 0.1`, hard kill at the cut). A burst
+  positioned around the cat's close-up face drifted into the next wide shot's empty sky.
 - **Heart burst** (`#hearts`): 3–4 SVG hearts in palette colours, scale from 0 with
   rotation, float up 90 px, fade after ~0.7 s. Quiet notify pop.
 

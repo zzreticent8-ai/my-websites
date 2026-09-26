@@ -43,6 +43,9 @@ Each of these cost a render cycle once. Check them before rendering.
 - Lint errors don't stop `render`, so read the lint output before trusting a draft.
 
 ## Look
+- **Overlays outliving their shot.** Sparkles placed around a close-up kept floating after
+  the cut to a far wide and hung in the sky. Anything positioned for one framing must end
+  by that shot's cut; check a keyframe just after every cut.
 - **Push still moving at the swap.** A prop push timed to the source end (10.0) while
   the end card faded in at 9.85 left the prop 170 px off its end-card version. End the
   push inside the fade (`T.cut + 0.1`) and check the handoff frames.

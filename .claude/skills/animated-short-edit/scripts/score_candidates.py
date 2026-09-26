@@ -11,7 +11,9 @@ Usage:
   score_candidates.py <video> <start> <end> --file candidates.txt     # one candidate per line
 
 Candidates use the phrases.txt convention: display text, optionally "| spoken tokens".
-Pick a window from transcribe.py's word times with ~0.1 s margin on each side.
+Pick a window from transcribe.py's word times with ~0.1 s margin on each side, and make it
+cover the *whole* doubtful stretch: start at the first garbled word, not where you think the
+line begins. A window starting 0.4 s late cut off "Besides" and ranked the wrong wording first.
 """
 import argparse, os, re, subprocess, sys, tempfile, wave
 

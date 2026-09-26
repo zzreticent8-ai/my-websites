@@ -132,7 +132,8 @@ Pick keyframe times at every beat and on both sides of every transition. Look fo
 overlays touching faces/captions/logo, text overflow or wrapping (LED fonts wrap
 easily), dim text, the push-in target drifting off-centre, and a jump in scale between
 the zoomed prop and the end card (the push must finish as the card takes over; check
-frames just before, at and just after `T.cut`). Crop full-res regions to check small UI text.
+frames just before, at and just after `T.cut`), and effects positioned for one shot that
+are still on screen after its cut (check a frame just after every cut). Crop full-res regions to check small UI text.
 Read `references/gotchas.md` before the first render — it lists the failures already hit.
 
 ## 5. Final

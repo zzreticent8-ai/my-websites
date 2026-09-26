@@ -32,7 +32,12 @@ python3 scripts/score_candidates.py <video> 3.6 5.0 "Then learn AI too. | then l
     "Then learn AI. | then learn a i" "So learn AI too. | so learn a i too"
 ```
 
-Take the window from `transcribe.py`'s word times, with ~0.1 s margin. Higher is better
+Take the window from `transcribe.py`'s word times, with ~0.1 s margin, and make it cover
+the whole garbled stretch, starting at the first odd word of the hypothesis. On the campfire
+clip ("…business advice herbicides that line with the lesson"), a window starting at 3.85
+clipped "Besides" and ranked "And what's the lesson?" first; the window from 3.3, which
+contains "herbicides" (3.45), ranked "Besides that line, what's the lesson?" clearly on
+top. If two windows disagree, trust the one that holds every garbled word. Higher is better
 within one window. "Could not align" means the wording doesn't fit the audio at all
 ("For real?", "Fair enough." at the end of the bookstore clip). Gaps under ~0.005 are a
 tie ("Fair." vs "Oh, fair."); settle it from the frames and prefer the simpler caption.
