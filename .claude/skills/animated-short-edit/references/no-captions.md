@@ -24,6 +24,21 @@ Easy.
 You give AI a job, | you give a i a job
 ```
 
+When a stretch of the hypothesis could be several wordings, rank them against the audio
+before committing:
+
+```bash
+python3 scripts/score_candidates.py <video> 3.6 5.0 "Then learn AI too. | then learn a i too" \
+    "Then learn AI. | then learn a i" "So learn AI too. | so learn a i too"
+```
+
+Take the window from `transcribe.py`'s word times, with ~0.1 s margin. Higher is better
+within one window. "Could not align" means the wording doesn't fit the audio at all
+("For real?", "Fair enough." at the end of the bookstore clip). Gaps under ~0.005 are a
+tie ("Fair." vs "Oh, fair."); settle it from the frames and prefer the simpler caption.
+On the bookstore clip this settled every doubtful line: "them learn a guy to" → "Then learn
+AI too.", "no one would a guy can do" → "knowing what AI can do".
+
 Text after `|` is what was *spoken*, for acronyms, numbers and brand names
 ("AI" → `a i`, "$20" → `twenty dollars`, "ChatGPT" → `chat g p t`). Then:
 
@@ -34,7 +49,9 @@ python3 scripts/align_captions.py <video> phrases.txt <outdir> --end <T.cut>
 It force-aligns the script, stops with a list of any words missing from the dictionary
 (respell them after `|`), and writes `words.json`, `phrases.json` and `captions.html`
 (ready-made `.cap` clips on track 3). Sanity-check it: the gaps between phrases should
-line up with `silences_-30dB` from `analyze.py`. A word that aligns to under ~0.1 s at
+line up with `silences_-30dB` from `analyze.py`. The aligner can start a phrase inside
+the preceding pause ("Because" at 1.86 when speech resumed at 2.07); move that caption's
+start to the silence end and extend the previous caption to meet it. A word that aligns to under ~0.1 s at
 the very start was probably never spoken; drop it.
 
 Say in VERIFY.md and to the user that the words are a corrected recognizer pass and
@@ -79,7 +96,9 @@ For any other brand, use a logo the user supplies. Never draw one.
 With no creator CTA to keep, write one in the series' voice: a short question on the
 video's claim plus "Comment below" ("Could you explain AI this simply?"). Tell the user
 you wrote it. When speech runs to the end of the source, start the end card on the last
-word's end and cross-fade over ~0.15 s while the push finishes. Keep the video clip
+word's end and cross-fade over ~0.15 s. The push must *land* inside that fade (end it at
+`T.cut + 0.1`), not at the source end: a push timed to 10.0 left the real book 170 px
+off the end-card cover at the swap. Keep the video clip
 running to the source end.
 
 ## 5. Frame rate and size

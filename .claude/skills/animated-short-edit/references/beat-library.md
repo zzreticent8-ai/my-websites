@@ -74,6 +74,12 @@ Find a prop in the last wide shot that carries a message (sign, screen, poster).
   element will sit: `x = targetX - propX`, `y = targetY - propY`. Scale around an
   origin keeps that point fixed; without the translate the prop stays in a corner.
 - Whoosh starts ~0.45 s before the cut so its swell peaks on the cut.
+- Time the push to finish where the end card takes over: at `T.cut` for a hard cut,
+  at `T.cut + 0.1` when the card cross-fades in (the prop must be in place mid-fade).
+  Check frames at `T.cut - 0.05`, `T.cut + 0.03` and `T.cut + 0.1`: the real prop should
+  sit under its end-card version.
+- A held object works as the prop too: the book in her arms became the end card's
+  book cover ("The next chapter: Learn AI too"), with a small `rotationY` settle.
 - The end card's version of the prop enters at a scale matching the zoomed prop's
   on-screen size (≈1.1), not a dramatic 1.9, so the handoff reads as one move.
 

@@ -43,6 +43,9 @@ Each of these cost a render cycle once. Check them before rendering.
 - Lint errors don't stop `render`, so read the lint output before trusting a draft.
 
 ## Look
+- **Push still moving at the swap.** A prop push timed to the source end (10.0) while
+  the end card faded in at 9.85 left the prop 170 px off its end-card version. End the
+  push inside the fade (`T.cut + 0.1`) and check the handoff frames.
 - **A state shown for 0.3 s doesn't register.** "Built to handle growth" appeared at
   answer+0.6 and exited at the wide cut. Switch states as the line starts and keep
   the card through the next shot if needed; exit before the push.

@@ -38,7 +38,8 @@ Look at both images, then establish:
 
 - **Captions burned in?** If no frame shows a caption box (caption changes only echo
   cuts or fire during camera motion), follow `references/no-captions.md`: rough
-  transcript with `scripts/transcribe.py`, correct it, `scripts/align_captions.py` for
+  transcript with `scripts/transcribe.py`, correct it (rank doubtful lines with
+  `scripts/score_candidates.py`), `scripts/align_captions.py` for
   word-timed caption clips, series logo bug, a written CTA. The rest of this workflow
   is unchanged.
 
@@ -130,7 +131,8 @@ bash .claude/skills/animated-short-edit/scripts/keyframes.sh renders/draft-v1.mp
 Pick keyframe times at every beat and on both sides of every transition. Look for:
 overlays touching faces/captions/logo, text overflow or wrapping (LED fonts wrap
 easily), dim text, the push-in target drifting off-centre, and a jump in scale between
-the zoomed prop and the end card. Crop full-res regions to check small UI text.
+the zoomed prop and the end card (the push must finish as the card takes over; check
+frames just before, at and just after `T.cut`). Crop full-res regions to check small UI text.
 Read `references/gotchas.md` before the first render — it lists the failures already hit.
 
 ## 5. Final
