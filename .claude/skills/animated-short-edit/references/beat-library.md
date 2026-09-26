@@ -31,13 +31,32 @@ One card, stacked states cross-faded in place. Planting → answer → scale-up 
 Other contents that fit the same card: payment received → "$ paid" → revenue counter;
 booking request → "Booked ✓" → calendar filling; DM → auto-reply → inbox zero.
 
+## 1b. Other card shapes that worked
+
+- **Checklist chips** (plan / recipe): title + 3 chips with empty check circles. Each
+  chip turns mint with a check and a 0.1 s scale pop on its own spoken noun, plus a
+  tick SFX (0.2). Chips use short nouns ("Customers", "Systems", "Automation"), not
+  the caption line.
+- **Jargon strike-through** (hook for "without complicated words"): coral chips
+  ("LLM", "neural net", "tokens") get a red line drawn across (`scaleX` 0→1, 0.14 s,
+  0.16 s stagger) and dim to 45 %.
+- **Meter vs capacity** (warning): an orders bar races (`scaleX`, `power2.in`) past a
+  white capacity marker while a counter climbs; an "overloaded" tag pops in coral. On
+  the answer line, a mint capacity fill grows under it and the marker fades.
+- **Countdown** (work gets faster): a "min" counter falling 60 → 2 with `power2.in` while
+  a bar fills orange→mint; the number turns mint and pulses on "faster".
+- **Timer fast-forward** (see §4b): m:ss → h:mm:ss on "an hour ago".
+
 ## 2. Camera moves (`#cam`, non-timed wrapper around the video)
 
 - **Punch-in** on a surprised line: scale 1→1.08 over 0.16 s `power3.out`, 4-step x
   shake of 8 px (`yoyo, repeat:3` ends at 0), settle to 1.04, slow drift to 1.07.
 - **Reset on the cut** back to the other character with `tl.set` at the scene-cut time.
 - **Slow push** through a reaction shot: 1→1.06 linear across the shot.
-- Keep scale ≤1.08 while burned captions/logo are on screen, or they crop.
+- Keep scale ≤1.08 while burned captions/logo are on screen, or they crop. Captions and
+  the logo bug that *you* add live outside `#cam`, so punch-ins can go to ~1.12.
+- **Punch-in toward a character in a wide shot:** set `transformOrigin` to that
+  character's head for the shot ("Easy." → origin on the cat at (780,1000)).
 
 ## 3. Reaction marks and bursts
 

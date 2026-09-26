@@ -6,9 +6,11 @@ Each of these cost a render cycle once. Check them before rendering.
 - **Renderer can't find Chrome.** `hyperframes doctor` says "Chrome Headless Shell is
   required". Set `PRODUCER_HEADLESS_SHELL_PATH` and `HYPERFRAMES_BROWSER_PATH` to the
   Playwright `headless_shell` binary (`setup.sh` finds it under `/opt/pw-browsers`).
-- **Transcription models blocked.** `faster-whisper` (huggingface.co) and `openai-whisper`
-  (openaipublic.azureedge.net) downloads get a 403 from the proxy. Don't burn time;
-  derive timing from caption changes (`analyze.py`) and read text off frames.
+- **Transcription models blocked.** `faster-whisper` (huggingface.co), `openai-whisper`
+  (openaipublic.azureedge.net), vosk (alphacephei.com) and whisper.cpp release downloads
+  are blocked by the proxy. PyPI is reachable: `pocketsphinx` ships its own English model.
+  With burned captions, time from caption changes (`analyze.py`); without them, use
+  `transcribe.py` + `align_captions.py` (see no-captions.md).
 - **Fonts via jsdelivr are blocked**, fonts.googleapis.com works: use `fonts.sh`.
 - **Kie.ai** needs `KIE_API_KEY` in the cloud environment's variables and `api.kie.ai`
   in allowed network domains. Tell the user where; never ask for the key in chat.
@@ -28,7 +30,24 @@ Each of these cost a render cycle once. Check them before rendering.
 - `tl.set` a new `transformOrigin` at the cut where it changes. Seeking backwards
   reverts it correctly.
 
+## Lint rules that fired
+- `gsap_non_transform_motion` (error): tweening `left`/`top`/`width` snaps to pixels and
+  stutters under frame capture. Use only transforms (`x`, `y`, `scale`, `rotation`),
+  `opacity` and colours. A capacity marker sliding via `left` became a fade.
+- `overlapping_gsap_tweens` (warning): two tweens on the same property of the same element
+  overlap in time, e.g. a pop-in scale and a pulse scale. Start the second after the first ends.
+- `gsap_exit_missing_hard_kill` (error): an element faded out right at its clip's end
+  needs `tl.set(sel, { opacity: 0 }, clipEnd)` after the fade, so non-linear seeking
+  can't land on stale visibility.
+- `timeline_track_too_dense` (warning): ~10 caption clips on one track. Acceptable for a reel.
+- Lint errors don't stop `render`, so read the lint output before trusting a draft.
+
 ## Look
+- **A state shown for 0.3 s doesn't register.** "Built to handle growth" appeared at
+  answer+0.6 and exited at the wide cut. Switch states as the line starts and keep
+  the card through the next shot if needed; exit before the push.
+- A chip's scale pop (1.1–1.12) briefly overlaps its neighbour in the chip row. It's
+  transient and fine, but don't judge spacing from a frame mid-pop.
 - **`back.in` exits linger.** A 0.4 s `back.in` first dips the other way, so the card
   still sat in place ~0.2 s after the line and covered the reaction burst. Exit with
   0.3 s `power2.in` starting ~0.05 s early, then check a keyframe 0.15 s after the line.

@@ -1,6 +1,6 @@
 ---
 name: animated-short-edit
-description: Polish a short vertical AI-animated or cartoon skit (Reels/Shorts/TikTok, usually 8–30 s with burned-in captions, a corner logo and a plain CTA end screen) into a finished reel using the HyperFrames student kit — story overlays that make the invisible idea visible (notification cards, counters), camera punch-ins on reactions, reaction bursts, a callback push-in into an animated end card, synthesized SFX, loudness mastering and frame-level verification. Use this whenever the user uploads or points to a short character/cartoon/AI-generated video and asks to edit it, "make it pop", add motion graphics, improve the hook or ending, redo the CTA, or "edit it like the bus video", even if they don't name HyperFrames or this skill.
+description: Polish a short vertical AI-animated or cartoon skit (Reels/Shorts/TikTok, usually 8–30 s) into a finished reel, whether it already has burned-in captions, a corner logo and a plain CTA end screen, or is raw with none of those (captions from an offline transcript, logo and end card get added), using the HyperFrames student kit — story overlays that make the invisible idea visible (notification cards, counters), camera punch-ins on reactions, reaction bursts, a callback push-in into an animated end card, synthesized SFX, loudness mastering and frame-level verification. Use this whenever the user uploads or points to a short character/cartoon/AI-generated video and asks to edit it, "make it pop", add captions or motion graphics, improve the hook or ending, redo the CTA, or "edit it like the bus video", even if they don't name HyperFrames or this skill.
 ---
 
 # Animated short edit
@@ -36,6 +36,12 @@ Writes `analysis.json` (streams, scene cuts, caption-change times, speech gaps,
 loudness) plus `contact.jpg` and `events.jpg` (a labelled frame at every detected event).
 Look at both images, then establish:
 
+- **Captions burned in?** If no frame shows a caption box (caption changes only echo
+  cuts or fire during camera motion), follow `references/no-captions.md`: rough
+  transcript with `scripts/transcribe.py`, correct it, `scripts/align_captions.py` for
+  word-timed caption clips, series logo bug, a written CTA. The rest of this workflow
+  is unchanged.
+
 - **Dialogue + timing map.** Read each caption off `events.jpg` and pair it with its
   change time. That map is your word-timing source when no ASR is available (Hugging
   Face / OpenAI model hosts are often blocked; ElevenLabs needs a key). If the caption
@@ -55,11 +61,14 @@ Look at both images, then establish:
 - **Brand assets:** crop the logo from a clean frame (black end card is ideal) — never
   redraw it. `ffmpeg -ss T -i v.mp4 -frames:v 1 -vf crop=W:H:X:Y logo-crop.png`, then
   `-vf colorkey=0x000000:0.06:0.08,format=rgba logo.png` for transparency. View the crop.
+  For Her Startup Ideas videos the series logo is bundled as
+  `assets/her-startup-ideas-logo.png`.
 
 ## 2. Plan (write before HTML)
 
 Create the project: `cd <kit> && npm run new-video -- <slug>`, copy the source to
-`assets/source.mp4`, and set `meta.json` to `1080x1920`, `id: "main"`.
+`assets/source.mp4`, and set `meta.json` to `1080x1920`, `id: "main"`, and `fps` to the
+source frame rate (pass the same `--fps` to every render; 24 → 30 adds judder).
 
 Write `DESIGN.md` with a palette **sampled from the footage** (seat fabric, character
 colours, caption colour) so overlays look native, 1–2 fonts, and a "what not to do"
@@ -85,6 +94,11 @@ Pick beats from `references/beat-library.md`. The default arc that worked:
 7. **End card 3–3.5 s** — keep the creator's original CTA wording, add a pill button and
    the cropped logo. Enough time to read; original black cards are usually too short.
 
+Give every card state at least ~1 s on screen; if two states crowd one line, switch
+earlier or hold the last state into the next shot instead of cutting it short. When
+several items share one caption ("More customers, better systems"), estimate each
+item's spoken time (~0.25 s per syllable) or align it with `align_captions.py`.
+
 Keep the illustrative content plausible and label it as illustrative in VERIFY.md (the
 counter number and message text are invented).
 
@@ -107,7 +121,7 @@ counter number and message text are invented).
 ## 4. Check, render, look
 
 ```bash
-cd <project> && npx hyperframes lint          # must be 0 errors
+cd <project> && npx hyperframes lint          # must be 0 errors (rules in gotchas.md)
 node ../../scripts/preflight.mjs .            # see gotcha about root data-start
 <export line from setup> npx hyperframes render --quality draft --output renders/draft-v1.mp4
 bash .claude/skills/animated-short-edit/scripts/keyframes.sh renders/draft-v1.mp4 /tmp/sheet.jpg 0.3 1.9 3.35 5 6.9 7.7 9.4 9.55 10.4 12.7
