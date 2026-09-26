@@ -24,11 +24,14 @@ Each of these cost a render cycle once. Check them before rendering.
 - Same `data-track-index` clips must not overlap: give each SFX type its own track and
   reuse a track only for sequential cues (ticks).
 - `transform-origin` zoom keeps the origin point fixed on screen. To push *into* a prop
-  and centre it, tween `x/y` together with `scale` (see beat-library §4).
+  and centre it, tween `x/y` together with `scale` (see beat-library §4a).
 - `tl.set` a new `transformOrigin` at the cut where it changes. Seeking backwards
   reverts it correctly.
 
 ## Look
+- **`back.in` exits linger.** A 0.4 s `back.in` first dips the other way, so the card
+  still sat in place ~0.2 s after the line and covered the reaction burst. Exit with
+  0.3 s `power2.in` starting ~0.05 s early, then check a keyframe 0.15 s after the line.
 - Burned captions **lag scene cuts by ~0.25 s** (the previous line lingers into the next
   shot). Anchor overlay state changes to caption changes and camera resets to cuts.
 - Silkscreen/LED text **wraps** at 60 px with letter-spacing in a 900 px panel. Use

@@ -199,7 +199,7 @@ tl.to(counter, { n: T.countTo, duration: countDur, ease: 'power1.in',
                  onUpdate: () => { countEl.textContent = Math.round(counter.n); } }, T.escalate + 0.08);
 tl.fromTo('#count', { scale: 1 }, { scale: 1.25, duration: 0.14, ease: 'power2.out', yoyo: true, repeat: 1 }, T.confirm);
 tl.to('#card', { borderColor: 'rgba(140,245,196,.9)', duration: 0.15 }, T.confirm);
-tl.to('#card', { y: -260, opacity: 0, duration: 0.4, ease: 'back.in(1.4)' }, T.emotion + 0.03);
+tl.to('#card', { y: -260, opacity: 0, duration: 0.3, ease: 'power2.in' }, T.emotion - 0.05);
 
 /* ---- surprise marks ---- */
 ['#m1', '#m2', '#m3', '#m4'].forEach((m, i) => {

@@ -47,7 +47,9 @@ Look at both images, then establish:
 - **Keep-out zones:** faces in each shot, the burned caption band, the logo corner.
 - **Callback props:** signs, screens, notebooks, cups with text in the world. A prop
   that already carries a message (a bus sign reading "NEXT STOP: NEW OPPORTUNITIES")
-  makes the best bridge into the end card.
+  makes the best bridge into the end card. If the last shot has no such prop (open
+  beach, plain room), the overlay card itself is the callback: it returns on the end
+  card in its fulfilled state (see beat-library §4b).
 - **Dead holds:** silent wide shots and static black CTA cards (`silence_start` near
   the end, black frames). These are what you trim or replace.
 - **Brand assets:** crop the logo from a clean frame (black end card is ideal) — never
@@ -75,8 +77,11 @@ Pick beats from `references/beat-library.md`. The default arc that worked:
 3. **Escalation** — on the "wait, really?" line, a punch-in on the reactor and
    the element scales up the claim (single reply → a counter climbing).
 4. **Confirmation** — pulse/check on the "yes" line.
-5. **Reaction** — burst (hearts, sparks) on the emotional line; UI tucks away.
-6. **Callback transition** — push the camera into a world prop that becomes the end card.
+5. **Reaction** — burst (hearts, sparks) on the emotional line; UI tucks away *fast*
+   (0.3 s `power2.in`, starting ~0.05 s before the line) so the burst owns the frame.
+6. **Callback transition** — push the camera into a world prop that becomes the end card,
+   or, with no prop, push into the characters and cross-fade to an end card where the
+   hook's card drops back in, resolved (toggle on, check, "on autopilot").
 7. **End card 3–3.5 s** — keep the creator's original CTA wording, add a pill button and
    the cropped logo. Enough time to read; original black cards are usually too short.
 

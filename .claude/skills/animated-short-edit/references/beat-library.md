@@ -25,7 +25,8 @@ One card, stacked states cross-faded in place. Planting → answer → scale-up 
   Count with an `onUpdate` tween (deterministic on seek) and `power1.in` so it
   accelerates. Ticks every ~0.3–0.4 s, not every increment.
 - **Pulse** on the confirmation ("Yup"): counter scale 1→1.25 yoyo, border flash.
-- **Exit** on the emotional line: `back.in` up and out, handing focus to the burst.
+- **Exit** on the emotional line: `y:-260, opacity:0`, 0.3 s `power2.in`, starting ~0.05 s
+  before the line so the card is gone by the time the burst peaks. Not `back.in` (see gotchas).
 
 Other contents that fit the same card: payment received → "$ paid" → revenue counter;
 booking request → "Booked ✓" → calendar filling; DM → auto-reply → inbox zero.
@@ -45,7 +46,7 @@ booking request → "Booked ✓" → calendar filling; DM → auto-reply → inb
 - **Heart burst** (`#hearts`): 3–4 SVG hearts in palette colours, scale from 0 with
   rotation, float up 90 px, fade after ~0.7 s. Quiet notify pop.
 
-## 4. Callback push-in → end card
+## 4a. Callback push-in → end card (a prop with a message exists)
 
 Find a prop in the last wide shot that carries a message (sign, screen, poster).
 
@@ -56,6 +57,23 @@ Find a prop in the last wide shot that carries a message (sign, screen, poster).
 - Whoosh starts ~0.45 s before the cut so its swell peaks on the cut.
 - The end card's version of the prop enters at a scale matching the zoomed prop's
   on-screen size (≈1.1), not a dramatic 1.9, so the handoff reads as one move.
+
+## 4b. Object callback (no usable prop)
+
+Used on the beach reel: the last wide shot was open sand and sea with nothing to zoom into.
+The card planted at 0.05 s ("Out of office") is the object the story broke; the end card
+shows it fixed.
+
+- Camera: `transformOrigin` on the characters' midpoint, drift 1→1.1, then 1.1→1.5
+  `power2.in` until `T.cut + 0.3`. Keep the video clip running 0.3 s past `T.cut`.
+- End card fades in over those 0.3 s (`tl.from('#cta', {opacity:0, duration:0.3})`) so
+  the push shows through. Dialogue audio still ends at `T.cut`.
+- The hero card drops in (`y:-300`, `back.out(1.5)`), then its resolved state lands on its
+  own beat: a toggle switching on (track colour tween + knob `x` from -60, tick SFX), a
+  check, or "on autopilot ✓". Question, pill and logo follow as in §5.
+- Timer variant of the escalation state: format seconds as m:ss / h:mm:ss, count slowly
+  and linearly on the innocent line ("just one quick look": 0→4 s), then fast-forward
+  `power2.in` on the callout ("an hour ago": →1:02:37), with ticks that speed up.
 
 ## 5. LED sign end card (`#cta`)
 
