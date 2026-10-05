@@ -43,6 +43,14 @@ Each of these cost a render cycle once. Check them before rendering.
 - Lint errors don't stop `render`, so read the lint output before trusting a draft.
 
 ## Look
+- **Frame edge revealed by a prop push.** Translating the zoomed video toward a target
+  needs enough scale to keep the frame covered (`s ≥ (1920 − ty)/(1920 − py)` for the
+  bottom). At 2.2× the coworking push showed a black band under the cup for ~0.1 s.
+  Check the frame just before the cut for bare edges.
+- **Estimated end-card targets miss.** A layout-maths guess put the cup at y 920; the render
+  had it at 883 and the two cups ghosted 40 px apart in the cross-fade. Measure from a frame.
+- **Default bands taken.** In a full-body wide her head sat in the card band and the cat and
+  mop sat in the caption band; both moved (card top-right, captions low-left).
 - **Overlays outliving their shot.** Sparkles placed around a close-up kept floating after
   the cut to a far wide and hung in the sky. Anything positioned for one framing must end
   by that shot's cut; check a keyframe just after every cut.

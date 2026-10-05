@@ -51,7 +51,9 @@ Look at both images, then establish:
 - **Who speaks each line** and the one-sentence story (setup → doubt → proof → reaction).
 - **The invisible thing** the dialogue talks about but never shows (the AI replying,
   money arriving, a booking landing). The overlay layer exists to show it.
-- **Keep-out zones:** faces in each shot, the burned caption band, the logo corner.
+- **Keep-out zones:** faces in each shot, the burned caption band, the logo corner, and
+  the shot's key subject or prop. When a character or prop fills the default card band
+  or caption band, move that element for the video (see beat-library "Safe zones").
 - **Callback props:** signs, screens, notebooks, cups with text in the world. A prop
   that already carries a message (a bus sign reading "NEXT STOP: NEW OPPORTUNITIES")
   makes the best bridge into the end card. If the last shot has no such prop (open
@@ -112,7 +114,7 @@ counter number and message text are invented).
   (downloads woff2 locally; the render must not depend on CDNs).
 - Dialogue audio: `ffmpeg -i assets/source.mp4 -t <cut_end> -vn -af "afade=t=out:st=<cut_end-0.35>:d=0.35" -ar 44100 -ac 2 assets/dialogue.wav`.
 - SFX: `bash scripts/make_sfx.sh <project>/assets` synthesizes notify, success, tick,
-  rise, whoosh, bell and pad, all normalized to -1 dBFS, so `data-volume` alone sets the
+  rise, fall, whoosh, bell and pad, all normalized to -1 dBFS, so `data-volume` alone sets the
   level. Starting volumes that sat right under dialogue are in `references/beat-library.md`.
 - If the user wants generated images/B-roll, Kie.ai is the kit's provider: it needs
   `KIE_API_KEY` in the environment (cloud env settings → Edit → environment variables)

@@ -25,6 +25,9 @@ ffmpeg -v error -y -f lavfi -i "anoisesrc=c=pink:d=0.6:a=0.6" \
 # bell: two-tone stop bell for the end card landing
 ffmpeg -v error -y -f lavfi -i "sine=f=659.3:d=0.9" -f lavfi -i "sine=f=880:d=0.9" \
   -filter_complex "[0]afade=t=out:st=0.02:d=0.8[a];[1]adelay=180|180,afade=t=out:st=0.2:d=0.7[b];[a][b]amix=2:normalize=0,$FMT" sfx-bell.wav
+# fall: quick downward chirp for a value collapsing ("important work" -> 5%)
+ffmpeg -v error -y -f lavfi -i "aevalsrc='0.5*sin(2*PI*(1100*t-1400*t*t))':d=0.3:s=44100" \
+  -af "afade=t=in:d=0.005,afade=t=out:st=0.12:d=0.18,$FMT" sfx-fall.wav
 # pad: soft A-major bed so the end card is not dead silent
 ffmpeg -v error -y -f lavfi -i "sine=f=220:d=$PAD" -f lavfi -i "sine=f=277.2:d=$PAD" -f lavfi -i "sine=f=329.6:d=$PAD" -f lavfi -i "sine=f=440:d=$PAD" \
   -filter_complex "amix=4:normalize=0,tremolo=f=3:d=0.25,lowpass=f=1800,afade=t=in:d=0.5,afade=t=out:st=$(python3 -c "print(max(0.5,$PAD-0.9))"):d=0.9,$FMT" sfx-pad.wav

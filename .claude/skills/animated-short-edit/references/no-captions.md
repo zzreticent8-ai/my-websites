@@ -41,6 +41,12 @@ top. If two windows disagree, trust the one that holds every garbled word. Highe
 within one window. "Could not align" means the wording doesn't fit the audio at all
 ("For real?", "Fair enough." at the end of the bookstore clip). Gaps under ~0.005 are a
 tie ("Fair." vs "Oh, fair."); settle it from the frames and prefer the simpler caption.
+If the top scorer is nonsense ("Be mean?"), the audio is telling you the syllables, not the
+sentence: build a family of real phrases around them ("Being mean?", "You mean?",
+"What do you mean?") in a tight window around just that reply, take the best *real*
+sentence, and name the runner-up to the user. When a contraction scores below the
+uncontracted form by a hair ("You been" vs "You've been"), caption the natural form and
+flag it; consonants like the "v" are easily swallowed.
 On the bookstore clip this settled every doubtful line: "them learn a guy to" → "Then learn
 AI too.", "no one would a guy can do" → "knowing what AI can do".
 
@@ -80,6 +86,11 @@ document.querySelectorAll('.cap').forEach(el => {
   tl.from(`#${el.id} span`, { scale: 0.9, opacity: 0, duration: 0.12, ease: 'back.out(2)' }, parseFloat(el.dataset.start));
 });
 ```
+
+If the band would cover the shot's subject or a text prop (the cat and mop in a full-body
+wide; the coworking cup in the final wide), drop the captions low-left instead: `top:1720px`,
+`justify-content:flex-start; padding-left:60px`, span `max-width:720px; text-align:left`.
+Use the same position for the whole video unless only one shot needs it.
 
 Ten or so caption clips on one track trigger lint's `timeline_track_too_dense` warning;
 that is fine for a short reel.
