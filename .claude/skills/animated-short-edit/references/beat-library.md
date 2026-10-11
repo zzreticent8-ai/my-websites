@@ -62,11 +62,38 @@ booking request → "Booked ✓" → calendar filling; DM → auto-reply → inb
   key word, the small bar swells while the important one collapses to coral with a falling
   tone (`sfx-fall`). The end card shows the same bars flipped (object callback).
 
+- **Idea pots** (plant everything vs focus): five SVG pots with labels drop in staggered
+  0.1 s with ticks while a "Time each" counter falls 100% → 20%. Three wilt on the "won't
+  grow" line (green sprout and drooping coral sprout stacked, cross-faded, `svgOrigin` at
+  the soil). On "focus" the wilted ones drop out, the two survivors slide together
+  (`x`, scale 1.12) and bloom (`back.out(3)`), and time goes up to 50%.
+- **Jagged → smooth line** (the roller-coaster business): a coral up-and-down sparkline draws
+  on (`pathLength=1`, dashoffset 1→0) on "roller coaster". Later the same card redraws a smooth
+  mint climb over a 22 % ghost of the jagged one ("enjoying the ride").
+- **Toggle + auto counter** ("would automation help?" → "imagine…"): a switch sits off with
+  "Would it help?". On the answer the knob slides (`x`), the track and icon turn mint, the gear
+  spins, the subtitle cross-fades to "Leads on autopilot", and a "+N new leads" counter
+  climbs by itself.
+- **Hours needed vs capacity**: each spoken task ("answer / schedule / follow up everyone")
+  lights its chip and bumps an hours counter (8 → 22 → 38 → 56) against "you have 40h"; the
+  number turns coral past 40 and an "overloaded" stamp lands with a card shake.
+- **Stamp tag**: `fromTo(tag, {opacity:0, scale:1.8, rotation:-12}, {opacity:1, scale:1,
+  rotation:-4, back.out(2.5)})` for "100% manual", "too high", "overloaded".
+- **Two-column verdict** ("not a customer problem → a capacity problem"): Customers ✓ in
+  mint next to a dimmed Capacity "?". On the realization the badge turns coral with ✗ and the
+  word gets a hand-drawn ring. Size the ring's own box to the *word*, not the column.
+- **Scanned items** (checkout theme): "Done by hand" chips slide in on scanner-beep ticks,
+  one per spoken word, then a coral "+24 more" pops on "A lot.".
+- **Icon swap**: stack two SVGs in the icon tile (person and robot) and cross-fade them on
+  the word, with a title swap the same way ("Your hours" → "Robot work · paid by you").
+
 ## 2. Camera moves (`#cam`, non-timed wrapper around the video)
 
 - **Punch-in** on a surprised line: scale 1→1.08 over 0.16 s `power3.out`, 4-step x
   shake of 8 px (`yoyo, repeat:3` ends at 0), settle to 1.04, slow drift to 1.07.
 - **Reset on the cut** back to the other character with `tl.set` at the scene-cut time.
+- **Ride rumble** (roller coaster, vehicles): `tl.to('#cam', {y: 6, duration: 0.06, yoyo: true,
+  repeat: 11})`. An odd repeat count ends back at 0. Start at scale ≥1.04 so edges stay covered.
 - **Slow push** through a reaction shot: 1→1.06 linear across the shot.
 - Keep scale ≤1.08 while burned captions/logo are on screen, or they crop. Captions and
   the logo bug that *you* add live outside `#cam`, so punch-ins can go to ~1.12.
@@ -79,6 +106,8 @@ booking request → "Booked ✓" → calendar filling; DM → auto-reply → inb
   a navy outline beside the head plus two short dash lines; pops in with `back.out(3)`, then
   slides down 60 px over 0.9 s. A cheap way to land a self-aware punchline.
 
+- **Question mark** ("How?"): a 130 px gold "?" with a dark outline (four text-shadows) beside
+  the asker's head, popping in with `back.out(3)`, wiggling with rotation yoyo and gone in 1 s.
 - **Surprise marks** (`#wow`): four short rounded strokes at the reactor's temples,
   `scaleY` from 0 with `back.out(3)`, 0.03 s stagger, fade at +0.55 s. Rise SFX.
 - **Bursts belong to their shot.** Place sparkles/hearts for the shot they appear in and
@@ -111,6 +140,18 @@ Find a prop in the last wide shot that carries a message (sign, screen, poster).
   1080. Moving the coworking cup from y 1525 to 600 at 2.2× left a black band; the fix was
   to put the end-card question *above* the cup so its target dropped to y 883 (then 2.7×
   covers it) and let the end-card cup enter at ~1.25× to match.
+- **Hold the end-card prop over the zoomed prop until the push lands.** The end-card version
+  starts at the zoomed prop's size and position and only settles after `T.cut + 0.1`:
+  `tl.from('#page', { y: 765, scale: 1.39, duration: 0.6, ease: 'power3.inOut' }, T.cut + 0.1)`.
+  `from()` renders its start state immediately, so the page sits on the real notebook through
+  the cross-fade. Started at `T.cut`, it had already risen 200 px above the notebook by the
+  first end-card frame.
+- **A prop low in the frame needs a low target.** The garden notebook sat at y 1780; centring
+  it would need ~5.7×. With target (540, 1600) 2.4× covers the edges, the end-card page enters
+  there at the matching size (1.39×) and then lifts into its layout slot. The lift reads as
+  one move.
+- **A prop at the side edge** (checkout screen at x≈985) needs `(1080 − tx)/(1080 − px)`,
+  ~6× to centre it. Above ~3× the zoom turns to mush: use §4c instead.
 - **Measure the target from a render,** not from layout arithmetic: render once, read the
   end-card prop's centre off a frame, set `T.propTarget`, re-check the handoff frames.
 - Text props work well: the cup's own words (Focus / Plan / Automate / Grow) were redrawn
@@ -133,6 +174,20 @@ shows it fixed.
 - Timer variant of the escalation state: format seconds as m:ss / h:mm:ss, count slowly
   and linearly on the innocent line ("just one quick look": 0→4 s), then fast-forward
   `power2.in` on the callout ("an hour ago": →1:02:37), with ticks that speed up.
+
+## 4c. Prop redrawn as the end-card hero (prop unreachable by a push)
+
+When the prop is too close to an edge for §4a, push on the characters as in §4b and make
+the end card's hero a clean redraw of the prop with the lesson applied:
+- Self-checkout screen: dark bezel, teal glass, "THANK YOU!" flickers (opacity yoyo ×3), then
+  swaps to "BORING STUFF / AUTOMATED ✓" (stacked lines, cross-fade). A receipt prints
+  underneath (Space Mono, zig-zag `clip-path` bottom), with lines landing 0.14 s apart and ticks:
+  Invoices AUTO / Emails AUTO / Scheduling AUTO / Robot work $0.
+- Wall sign (GOOD VIBES, reachable at 2×, so it was pushed into as well): the redraw hangs on
+  a string, swings once (`rotation -3→0`, `elastic.out(1,0.4)`, origin above the sign), and
+  gets a handwritten Caveat addition in coral: "+ good systems".
+- Notebook: "Grow what works" with the card's ideas, the wilted ones struck out
+  (`scaleX` 0→1 coral bar) and the survivors circled.
 
 ## 5. LED sign end card (`#cta`)
 

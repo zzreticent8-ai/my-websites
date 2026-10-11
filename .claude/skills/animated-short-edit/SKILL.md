@@ -58,9 +58,15 @@ Look at both images, then establish:
   that already carries a message (a bus sign reading "NEXT STOP: NEW OPPORTUNITIES")
   makes the best bridge into the end card. If the last shot has no such prop (open
   beach, plain room), the overlay card itself is the callback: it returns on the end
-  card in its fulfilled state (see beat-library §4b).
+  card in its fulfilled state (see beat-library §4b). Run the push math (§4a) before
+  committing to a prop: one at the frame edge (the checkout screen at x≈985) needs ~6×
+  to centre, so redraw it as the end-card hero instead (§4c).
 - **Dead holds:** silent wide shots and static black CTA cards (`silence_start` near
   the end, black frames). These are what you trim or replace.
+- **Stray end shots:** a scene cut in the last ~0.5 s that opens an unrelated, speechless
+  shot (a 3-frame neon tunnel, a 1-frame flash). End the edit before it (`T.cut` before
+  the cut, video `data-duration` stopping short of it) and tell the user what you cut.
+  If the shot runs past ~1 s or looks deliberate, ask before cutting it.
 - **Brand assets:** crop the logo from a clean frame (black end card is ideal) — never
   redraw it. `ffmpeg -ss T -i v.mp4 -frames:v 1 -vf crop=W:H:X:Y logo-crop.png`, then
   `-vf colorkey=0x000000:0.06:0.08,format=rgba logo.png` for transparency. View the crop.
@@ -113,6 +119,8 @@ counter number and message text are invented).
 - Fonts: `bash scripts/fonts.sh <project>/assets "Baloo+2:wght@600;800" "Silkscreen:wght@400;700"`
   (downloads woff2 locally; the render must not depend on CDNs).
 - Dialogue audio: `ffmpeg -i assets/source.mp4 -t <cut_end> -vn -af "afade=t=out:st=<cut_end-0.35>:d=0.35" -ar 44100 -ac 2 assets/dialogue.wav`.
+  If the last word ends within 0.35 s of `cut_end` ("Yes, that." ending at 9.75 with the cut
+  at 9.85), shorten the fade to 0.13–0.2 s so it doesn't swallow the word.
 - SFX: `bash scripts/make_sfx.sh <project>/assets` synthesizes notify, success, tick,
   rise, fall, whoosh, bell and pad, all normalized to -1 dBFS, so `data-volume` alone sets the
   level. Starting volumes that sat right under dialogue are in `references/beat-library.md`.
@@ -136,6 +144,8 @@ easily), dim text, the push-in target drifting off-centre, and a jump in scale b
 the zoomed prop and the end card (the push must finish as the card takes over; check
 frames just before, at and just after `T.cut`), and effects positioned for one shot that
 are still on screen after its cut (check a frame just after every cut). Crop full-res regions to check small UI text.
+Extract handoff frames with `-ss` *after* `-i` (`ffmpeg -i draft.mp4 -ss 9.875 …`) so they are
+frame-accurate; 24 fps frames land at 9.833 / 9.875 / 9.917 / 9.958.
 Read `references/gotchas.md` before the first render — it lists the failures already hit.
 
 ## 5. Final

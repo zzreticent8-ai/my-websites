@@ -64,6 +64,11 @@ line up with `silences_-30dB` from `analyze.py`. The aligner can start a phrase 
 the preceding pause ("Because" at 1.86 when speech resumed at 2.07); move that caption's
 start to the silence end and extend the previous caption to meet it. A word that aligns to under ~0.1 s at
 the very start was probably never spoken; drop it.
+The opposite also happens. If the aligner leaves a gap where the hypothesis heard speech
+("and enjoying the ride" aligned from 8.03, but the hypothesis had words from 7.62),
+start that caption at the hypothesis onset.
+A short filler before a line ("yeah" / "that's" before "Because…") that ties with nonsense
+can be left out of the caption. Mention it to the user.
 
 Say in VERIFY.md and to the user that the words are a corrected recognizer pass and
 need proofreading. You cannot hear the audio.

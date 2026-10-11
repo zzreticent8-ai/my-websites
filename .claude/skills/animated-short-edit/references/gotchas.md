@@ -42,6 +42,13 @@ Each of these cost a render cycle once. Check them before rendering.
 - `timeline_track_too_dense` (warning): ~10 caption clips on one track. Acceptable for a reel.
 - Lint errors don't stop `render`, so read the lint output before trusting a draft.
 
+## Timeline
+- **Never set text with `tl.set(el, {textContent})`** for a state change. It doesn't reverse
+  when the renderer seeks backwards. Stack both versions and cross-fade them. Counters
+  written from a tween's `onUpdate` are fine (deterministic for any seek).
+- In `fromTo` on SVG groups, put `svgOrigin` in **both** the from and to vars. Otherwise the
+  first frame scales around the wrong point.
+
 ## Look
 - **Frame edge revealed by a prop push.** Translating the zoomed video toward a target
   needs enough scale to keep the frame covered (`s ≥ (1920 − ty)/(1920 − py)` for the
@@ -60,6 +67,19 @@ Each of these cost a render cycle once. Check them before rendering.
 - **A state shown for 0.3 s doesn't register.** "Built to handle growth" appeared at
   answer+0.6 and exited at the wide cut. Switch states as the line starts and keep
   the card through the next shot if needed; exit before the push.
+- **End-card prop rising too early.** The garden page began lifting at `T.cut`, so at the
+  first end-card frame it sat 200 px above the zoomed notebook. Start its settle at
+  `T.cut + 0.1`, after the push lands (beat-library §4a).
+- **SVG line draws leave a dot.** `pathLength="1" stroke-dasharray="1"` with a round cap
+  draws a dot at the path end before the line is drawn (the next dash starts at length 1).
+  Use `stroke-dasharray="1 2"`.
+- **`vector-effect="non-scaling-stroke"` breaks `pathLength` dashes:** the end-card chart drew
+  as broken pieces. Drop it, and size the SVG to its viewBox aspect instead of
+  `preserveAspectRatio="none"` (which also stretches strokes unevenly).
+- **Ring callouts struck through the word.** A ring sized to the whole column cut across
+  "Capacity". Give the ring its own small box over the word (`preserveAspectRatio="none"` is fine there).
+- **Stray end shots.** Two sources ended in an unrelated shot (a 3-frame neon tunnel; a single
+  frame). Stop the video clip before that cut, end the edit before it and tell the user.
 - A chip's scale pop (1.1–1.12) briefly overlaps its neighbour in the chip row. It's
   transient and fine, but don't judge spacing from a frame mid-pop.
 - **`back.in` exits linger.** A 0.4 s `back.in` first dips the other way, so the card
