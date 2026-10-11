@@ -1,0 +1,229 @@
+<!doctype html>
+<!--
+  animated-short-edit composition template (worked example: "checking leads on the bus").
+  To adapt:
+    1. Retime: edit the T object in the script (source seconds; see analysis.json).
+    2. Keep the <audio> data-start values in sync with T (HTML attributes cannot read T).
+    3. Set data-duration on #main to T.end, the video/dialogue duration to T.cut,
+       and #cta start/duration to T.cut / T.end - T.cut.
+    4. Swap texts, palette (CSS), push-in target (T.prop / T.propTarget), CTA wording.
+  Layout: 1080x1920. Keep-out: faces, burned captions (y~1530-1670), logo corner.
+-->
+<html lang="en"><head><meta charset="utf-8"><title>Bus leads reel</title>
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<script src="assets/gsap.min.js"></script>
+<style>
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#05070f;font-family:'Baloo 2',sans-serif;color:#f6f3ee}
+#main{position:relative;width:1080px;height:1920px;overflow:hidden;background:#05070f}
+
+/* footage: animate the non-timed wrapper, never the video */
+#cam{position:absolute;inset:0;transform-origin:540px 860px;will-change:transform}
+#src{position:absolute;inset:0;width:1080px;height:1920px;object-fit:cover}
+
+/* AI inbox notification */
+#inbox{position:absolute;left:0;top:0;width:1080px;height:420px;z-index:5}
+.card{position:absolute;left:110px;top:186px;width:860px;height:144px;border-radius:34px;
+  background:rgba(12,21,51,.92);border:2px solid rgba(140,245,196,.35);
+  box-shadow:0 18px 40px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.12);overflow:hidden}
+.state{position:absolute;inset:0;display:flex;align-items:center;gap:24px;padding:0 34px 0 22px}
+.icon{flex:0 0 88px;height:88px;border-radius:26px;display:flex;align-items:center;justify-content:center}
+.icon svg{width:50px;height:50px}
+.i-lead{background:#ff9f3a}.i-ok{background:#8cf5c4}
+.txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:0}
+.ttl{font-weight:800;font-size:42px;line-height:1.05;color:#f6f3ee;display:flex;align-items:center;gap:12px}
+.tag{font-weight:600;font-size:22px;padding:2px 12px;border-radius:20px;background:rgba(140,245,196,.18);color:#8cf5c4}
+.sub{font-weight:600;font-size:31px;line-height:1.2;color:rgba(246,243,238,.78);white-space:nowrap}
+.meta{font-weight:600;font-size:26px;color:rgba(246,243,238,.55)}
+.count{font-weight:800;font-size:76px;line-height:1;color:#8cf5c4;min-width:110px;text-align:right}
+.bar{margin-top:10px;height:12px;border-radius:6px;background:rgba(246,243,238,.15);overflow:hidden}
+.fill{height:100%;width:100%;border-radius:6px;background:linear-gradient(90deg,#8cf5c4,#ff9f3a);transform-origin:0 50%}
+
+/* reaction marks */
+#wow{position:absolute;inset:0;z-index:4}
+.mark{position:absolute;width:14px;height:64px;border-radius:7px;background:#fff6dc;box-shadow:0 0 0 4px rgba(12,21,51,.55)}
+#hearts{position:absolute;inset:0;z-index:4}
+.heart{position:absolute;width:110px;height:110px}
+.heart svg{width:100%;height:100%;filter:drop-shadow(0 8px 12px rgba(0,0,0,.35))}
+
+/* end card */
+#cta{position:absolute;inset:0;z-index:6;background:radial-gradient(ellipse at 50% 30%,#172453 0%,#05070f 70%)}
+.scene-content{width:100%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:72px;padding:200px 70px 240px;text-align:center}
+#led{width:900px;padding:18px;border-radius:28px;background:#2b2e33;box-shadow:0 30px 70px rgba(0,0,0,.6),inset 0 2px 0 rgba(255,255,255,.08)}
+.screen{position:relative;border-radius:16px;background:#0b0906;padding:44px 20px;overflow:hidden}
+.screen::after{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle,transparent 2.2px,rgba(11,9,6,.4) 3.1px);background-size:7px 7px;pointer-events:none}
+.led-line{font-family:'Silkscreen',monospace;font-weight:700;color:#ffae3d;letter-spacing:0;line-height:1.2;white-space:nowrap;
+  text-shadow:0 0 10px rgba(255,160,40,.9),0 0 26px rgba(255,120,20,.55)}
+.l1{font-size:64px}.l2{font-size:56px}
+.ch{display:inline-block}
+.q{font-weight:800;font-size:88px;line-height:1.05;max-width:940px;letter-spacing:-1px}
+.q .hl{color:#ff9f3a}
+.w{display:inline-block}
+#pill{display:flex;align-items:center;gap:16px;padding:18px 44px 18px 48px;border-radius:60px;background:#8cf5c4;color:#0c1533;font-weight:800;font-size:60px;box-shadow:0 14px 30px rgba(140,245,196,.25)}
+#pill svg{width:44px;height:44px}
+#logo{width:300px;height:300px}
+</style></head><body>
+<div id="main" data-composition-id="main" data-start="0" data-duration="12.83" data-width="1080" data-height="1920">
+
+  <div id="cam">
+    <video id="src" src="assets/source.mp4" data-start="0" data-duration="9.53" data-track-index="0" muted playsinline></video>
+  </div>
+
+  <!-- AI inbox: plants the question (a lead arrives), then shows the AI answering it -->
+  <div id="inbox" class="clip" data-start="0.05" data-duration="7.95" data-track-index="2">
+    <div class="card" id="card">
+      <div class="state" id="st1">
+        <div class="icon i-lead"><svg viewBox="0 0 24 24" fill="none" stroke="#0c1533" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg></div>
+        <div class="txt"><div class="ttl">New lead</div><div class="sub">“Hi! Is this still available?”</div></div>
+        <div class="meta">now</div>
+      </div>
+      <div class="state" id="st2">
+        <div class="icon i-ok"><svg viewBox="0 0 24 24" fill="none" stroke="#0c1533" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></div>
+        <div class="txt"><div class="ttl">AI replied <span class="tag">auto</span></div><div class="sub">“Yes! Want to book a quick call?”</div></div>
+        <div class="meta">2s</div>
+      </div>
+      <div class="state" id="st3">
+        <div class="icon i-ok"><svg viewBox="0 0 24 24" fill="#0c1533"><path d="M13.5 2 4 13.5h6.5L9.5 22 20 9.5h-6.5z"/></svg></div>
+        <div class="txt"><div class="ttl">Replies sent by AI</div><div class="bar"><div class="fill" id="fill"></div></div></div>
+        <div class="count" id="count">1</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- "wait" surprise marks around the cat's head -->
+  <div id="wow" class="clip" data-start="3.28" data-duration="0.9" data-track-index="3">
+    <div class="mark" id="m1" style="left:236px;top:360px;transform:rotate(-35deg)"></div>
+    <div class="mark" id="m2" style="left:176px;top:470px;transform:rotate(-65deg)"></div>
+    <div class="mark" id="m3" style="left:830px;top:360px;transform:rotate(35deg)"></div>
+    <div class="mark" id="m4" style="left:890px;top:470px;transform:rotate(65deg)"></div>
+  </div>
+
+  <!-- "Ok, I officially like AI!" heart burst -->
+  <div id="hearts" class="clip" data-start="7.45" data-duration="1.1" data-track-index="5">
+    <div class="heart" id="h1" style="left:120px;top:560px"><svg viewBox="0 0 24 24"><path fill="#ff9f3a" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.2 0 3.7 1.3 5.3 3.2 1.6-1.9 3.1-3.2 5.3-3.2 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></div>
+    <div class="heart" id="h2" style="left:230px;top:380px;width:80px;height:80px"><svg viewBox="0 0 24 24"><path fill="#8cf5c4" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.2 0 3.7 1.3 5.3 3.2 1.6-1.9 3.1-3.2 5.3-3.2 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></div>
+    <div class="heart" id="h3" style="left:850px;top:540px"><svg viewBox="0 0 24 24"><path fill="#ff5d73" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.2 0 3.7 1.3 5.3 3.2 1.6-1.9 3.1-3.2 5.3-3.2 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></div>
+    <div class="heart" id="h4" style="left:780px;top:380px;width:76px;height:76px"><svg viewBox="0 0 24 24"><path fill="#ff9f3a" d="M12 21s-7.5-4.6-9.6-9.2C.9 8.4 3 4.5 6.7 4.5c2.2 0 3.7 1.3 5.3 3.2 1.6-1.9 3.1-3.2 5.3-3.2 3.7 0 5.8 3.9 4.3 7.3C19.5 16.4 12 21 12 21z"/></svg></div>
+  </div>
+
+  <!-- End card: the bus's LED sign becomes the CTA -->
+  <div id="cta" class="clip" data-start="9.53" data-duration="3.3" data-track-index="4">
+    <div class="scene-content">
+      <div id="led"><div class="screen">
+        <div class="led-line l1" id="led1">NEXT STOP:</div>
+        <div class="led-line l2" id="led2">NEW OPPORTUNITIES</div>
+      </div></div>
+      <div class="q" id="q"><span class="w">Can</span> <span class="w">you</span> <span class="w">handle</span> <span class="w">the</span> <span class="w hl">leads</span> <span class="w">while</span> <span class="w">away</span> <span class="w">from</span> <span class="w">your</span> <span class="w">desk?</span></div>
+      <div id="pill">Comment below <svg viewBox="0 0 24 24" fill="none" stroke="#0c1533" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v15M5.5 12.5 12 19l6.5-6.5"/></svg></div>
+      <img id="logo" src="assets/logo.png" alt="Her Startup Ideas">
+    </div>
+  </div>
+
+  <!-- audio (keep data-start in sync with T): dialogue + music from the source (trimmed, faded), SFX on their own tracks -->
+  <audio id="a-dialogue" src="assets/dialogue.wav" data-start="0" data-duration="9.53" data-track-index="10" data-volume="1"></audio>
+  <audio id="a-notify" src="assets/sfx-notify.wav" data-start="0.12" data-duration="0.2" data-track-index="11" data-volume="0.28"></audio>
+  <audio id="a-ok1" src="assets/sfx-success.wav" data-start="1.72" data-duration="0.5" data-track-index="12" data-volume="0.28"></audio>
+  <audio id="a-rise" src="assets/sfx-rise.wav" data-start="3.28" data-duration="0.22" data-track-index="13" data-volume="0.22"></audio>
+  <audio id="a-t1" src="assets/sfx-tick.wav" data-start="4.20" data-duration="0.06" data-track-index="14" data-volume="0.11"></audio>
+  <audio id="a-t2" src="assets/sfx-tick.wav" data-start="4.62" data-duration="0.06" data-track-index="14" data-volume="0.11"></audio>
+  <audio id="a-t3" src="assets/sfx-tick.wav" data-start="5.00" data-duration="0.06" data-track-index="14" data-volume="0.11"></audio>
+  <audio id="a-t4" src="assets/sfx-tick.wav" data-start="5.34" data-duration="0.06" data-track-index="14" data-volume="0.11"></audio>
+  <audio id="a-t5" src="assets/sfx-tick.wav" data-start="5.66" data-duration="0.06" data-track-index="14" data-volume="0.11"></audio>
+  <audio id="a-t6" src="assets/sfx-tick.wav" data-start="5.96" data-duration="0.06" data-track-index="14" data-volume="0.11"></audio>
+  <audio id="a-t7" src="assets/sfx-tick.wav" data-start="6.24" data-duration="0.06" data-track-index="14" data-volume="0.11"></audio>
+  <audio id="a-ok2" src="assets/sfx-success.wav" data-start="6.85" data-duration="0.5" data-track-index="12" data-volume="0.28"></audio>
+  <audio id="a-pop" src="assets/sfx-notify.wav" data-start="7.48" data-duration="0.2" data-track-index="11" data-volume="0.2"></audio>
+  <audio id="a-whoosh" src="assets/sfx-whoosh.wav" data-start="8.95" data-duration="0.6" data-track-index="15" data-volume="0.28"></audio>
+  <audio id="a-bell" src="assets/sfx-bell.wav" data-start="9.58" data-duration="0.9" data-track-index="16" data-volume="0.4"></audio>
+  <audio id="a-pad" src="assets/sfx-pad.wav" data-start="9.53" data-duration="3.3" data-track-index="17" data-volume="0.09"></audio>
+  <audio id="a-ok3" src="assets/sfx-notify.wav" data-start="11.02" data-duration="0.2" data-track-index="11" data-volume="0.28"></audio>
+</div>
+
+<script>
+// All beat times (seconds). Caption-change and scene-cut times come from analyze.py.
+const T = {
+  cardIn: 0.05,          // hook: problem arrives (first caption ~0.30)
+  answer: 1.66,          // caption "Nope. My AI is handling them." (1.63)
+  reactCut: 3.03,        // scene cut to the reactor (cat)
+  surprise: 3.28,        // caption "wait" (3.30) -> punch-in + marks
+  escalate: 4.07,        // caption "customers are getting replies"
+  cutBack: 5.41,         // scene cut back to the other character
+  reactShot: 6.58,       // scene cut to reactor for the confirmation
+  confirm: 6.83,         // caption "Yup"
+  emotion: 7.47,         // caption "Ok, I officially like AI!"
+  wide: 8.53,            // scene cut to the silent wide shot
+  push: 8.95,            // start of push-in through the prop
+  cut: 9.53,             // end of source used; end card starts
+  end: 12.83,            // total duration
+  countTo: 24,           // illustrative counter target
+  prop: [775, 460],      // prop centre in the wide shot (px)
+  propTarget: [540, 520] // where the end card's LED panel centre lands (px)
+};
+const tl = gsap.timeline({ paused: true });
+
+/* ---- camera (animate the wrapper, never the video) ---- */
+tl.set('#cam', { scale: 1, x: 0, y: 0 }, 0);
+tl.to('#cam', { scale: 1.08, duration: 0.16, ease: 'power3.out' }, T.surprise);
+tl.to('#cam', { x: 8, duration: 0.04, ease: 'none', yoyo: true, repeat: 3 }, T.surprise + 0.02);
+tl.to('#cam', { scale: 1.04, duration: 0.7, ease: 'power2.inOut' }, T.surprise + 0.22);
+tl.to('#cam', { scale: 1.07, duration: T.cutBack - T.escalate - 0.3, ease: 'none' }, T.escalate + 0.13);
+tl.set('#cam', { scale: 1, x: 0 }, T.cutBack);
+tl.set('#cam', { scale: 1.0 }, T.reactShot);
+tl.to('#cam', { scale: 1.06, duration: T.wide - T.reactShot, ease: 'none' }, T.reactShot);
+// wide shot: drift, then push through the prop while moving it to the end-card position
+tl.set('#cam', { scale: 1, transformOrigin: `${T.prop[0]}px ${T.prop[1]}px` }, T.wide);
+tl.to('#cam', { scale: 1.08, duration: T.push - T.wide, ease: 'none' }, T.wide);
+tl.to('#cam', { scale: 3.4, x: T.propTarget[0] - T.prop[0], y: T.propTarget[1] - T.prop[1],
+                duration: T.cut - T.push, ease: 'power2.in' }, T.push);
+
+/* ---- state-machine card: plant -> answer -> escalate -> confirm -> exit ---- */
+tl.set('#st2', { opacity: 0 }, 0);
+tl.set('#st3', { opacity: 0 }, 0);
+tl.from('#card', { y: -260, scale: 0.9, duration: 0.55, ease: 'back.out(1.6)' }, T.cardIn);
+tl.to('#st1', { y: -40, opacity: 0, duration: 0.25, ease: 'power2.in' }, T.answer);
+tl.fromTo('#st2', { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'back.out(2)' }, T.answer + 0.06);
+tl.fromTo('#st2 .icon', { scale: 0.4, rotation: -30 }, { scale: 1, rotation: 0, duration: 0.45, ease: 'back.out(3)' }, T.answer + 0.06);
+tl.to('#card', { borderColor: 'rgba(140,245,196,.9)', duration: 0.2 }, T.answer + 0.06);
+tl.to('#card', { borderColor: 'rgba(140,245,196,.35)', duration: 0.6 }, T.answer + 0.44);
+tl.to('#card', { scale: 0.92, duration: 0.3, ease: 'power2.out' }, T.surprise);   // stay small in close-up
+tl.to('#card', { scale: 1, duration: 0.3, ease: 'back.out(2)' }, T.escalate);
+tl.to('#st2', { y: -40, opacity: 0, duration: 0.22, ease: 'power2.in' }, T.escalate);
+tl.fromTo('#st3', { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.35, ease: 'back.out(2)' }, T.escalate + 0.05);
+const countDur = T.confirm - T.escalate - 0.2;
+tl.fromTo('#fill', { scaleX: 0.04 }, { scaleX: 1, duration: countDur, ease: 'power1.in' }, T.escalate + 0.08);
+const counter = { n: 1 };
+const countEl = document.getElementById('count');
+tl.to(counter, { n: T.countTo, duration: countDur, ease: 'power1.in',
+                 onUpdate: () => { countEl.textContent = Math.round(counter.n); } }, T.escalate + 0.08);
+tl.fromTo('#count', { scale: 1 }, { scale: 1.25, duration: 0.14, ease: 'power2.out', yoyo: true, repeat: 1 }, T.confirm);
+tl.to('#card', { borderColor: 'rgba(140,245,196,.9)', duration: 0.15 }, T.confirm);
+tl.to('#card', { y: -260, opacity: 0, duration: 0.3, ease: 'power2.in' }, T.emotion - 0.05);
+
+/* ---- surprise marks ---- */
+['#m1', '#m2', '#m3', '#m4'].forEach((m, i) => {
+  tl.from(m, { scaleY: 0, opacity: 0, duration: 0.14, ease: 'back.out(3)' }, T.surprise + 0.02 + i * 0.03);
+});
+tl.to('#wow .mark', { opacity: 0, duration: 0.3 }, T.surprise + 0.57);
+
+/* ---- heart burst ---- */
+[['#h1', 0], ['#h3', 0.06], ['#h2', 0.14], ['#h4', 0.2]].forEach(([h, d]) => {
+  tl.from(h, { scale: 0, rotation: -20, duration: 0.35, ease: 'back.out(3)' }, T.emotion + d);
+  tl.to(h, { y: -90, duration: 0.85, ease: 'power1.out' }, T.emotion + 0.13 + d);
+});
+tl.to('#hearts .heart', { opacity: 0, duration: 0.3 }, T.emotion + 0.73);
+
+/* ---- end card ---- */
+tl.from('#led', { scale: 1.12, y: 10, duration: 0.5, ease: 'power2.out' }, T.cut);
+tl.from('#led1', { opacity: 0, duration: 0.05, ease: 'none', repeat: 2, yoyo: true }, T.cut + 0.09);
+tl.from('#led2', { opacity: 0, duration: 0.05, ease: 'none', repeat: 2, yoyo: true }, T.cut + 0.27);
+tl.from('#q .w', { y: 50, opacity: 0, duration: 0.4, stagger: 0.06, ease: 'power3.out' }, T.cut + 0.57);
+tl.from('#pill', { scale: 0.5, opacity: 0, duration: 0.45, ease: 'back.out(2.2)' }, T.cut + 1.47);
+tl.to('#pill svg', { y: 8, duration: 0.35, ease: 'sine.inOut', yoyo: true, repeat: 3 }, T.cut + 1.92);
+tl.from('#logo', { scale: 0.6, opacity: 0, rotation: -8, duration: 0.5, ease: 'back.out(1.8)' }, T.cut + 1.72);
+
+window.__timelines = window.__timelines || {};
+window.__timelines['main'] = tl;
+</script>
+</body></html>
