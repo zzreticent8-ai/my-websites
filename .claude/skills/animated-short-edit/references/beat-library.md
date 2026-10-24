@@ -19,6 +19,12 @@ can see (a state, a number, a scale), not just appear.
   - Subject, mop or prop in the caption band: captions low-left (`top:1700–1720px`,
     `justify-content:flex-start; padding-left:60–90px; max-width:720px`), which stays clear
     of the logo corner (x 785+). For one shot only, add a `.cap.low` class to just those captions.
+    The cat's sock in its basket close-ups (three shots) sent the laundry captions low-left
+    for the whole video.
+- **One shot only:** when a face sits in the card band for a single shot (her head behind
+  the walking cat), shrink and slide the card for that shot (`scale: 0.7, x: 150`, 0.3 s
+  `power2.out` at the cut) and restore it at the next cut. For cat close-ups whose ear tips
+  reach y≈265, use `scale: 0.86, y: -40` instead of the usual 0.88 / −24.
 
 ## 1. State-machine notification card (`#inbox`, `#st1..#st3`)
 
@@ -87,11 +93,30 @@ booking request → "Booked ✓" → calendar filling; DM → auto-reply → inb
 - **Icon swap**: stack two SVGs in the icon tile (person and robot) and cross-fade them on
   the word, with a title swap the same way ("Your hours" → "Robot work · paid by you").
 
+- **Version flip** ("so a plan can change too?"): stacked version labels `v1` → `v2?` (gold)
+  → `v2 ✓` (mint) on the confirmation, with the subtitle swapping "a draft, not a contract"
+  → "changes with the market". The end card shows v1 · v2 · **v3 ✓** chips.
+- **Sunk-cost counter**: "Time invested · 0 → 6 months" with a "sunk cost" stamp, on "I spent
+  months creating it".
+- **Chips that each change**: each chip turns sky blue with its ↻ icon spinning 360° on its
+  own word ("The weather changes / you change / the market changes").
+- **Repeat counter** ("every week"): ×1 → ×52 "times a year".
+- **Manual → automated chips**: stack two icons in each chip (coral ↻ and a check), then flip
+  them one by one 0.1 s apart on "automate" as the hours count down to 0.
+- **Build vs forget split**: two columns. "Build it" lights mint on its word; on "forget it"
+  the other side goes coral, its bulb dims to 25 % and "memory 100%" drains to 5%.
+- **Typing note**: a Notes card types the idea in Caveat, one `<span>` per character
+  (`opacity` 0→1, stagger ~0.04 s), with an inline caret hidden until typing ends and then
+  blinking. A Save button sits beside it, and a coral "why?" bubble pops on the doubting
+  line. Don't reveal text with a cover rectangle: on a translucent card the cover reads as a box.
+
 ## 2. Camera moves (`#cam`, non-timed wrapper around the video)
 
 - **Punch-in** on a surprised line: scale 1→1.08 over 0.16 s `power3.out`, 4-step x
   shake of 8 px (`yoyo, repeat:3` ends at 0), settle to 1.04, slow drift to 1.07.
 - **Reset on the cut** back to the other character with `tl.set` at the scene-cut time.
+- **Source camera already moving** (a pan from a close-up into a two-shot): keep `#cam` to
+  a gentle 1→1.04 drift there; a punch-in would fight the move.
 - **Ride rumble** (roller coaster, vehicles): `tl.to('#cam', {y: 6, duration: 0.06, yoyo: true,
   repeat: 11})`. An odd repeat count ends back at 0. Start at scale ≥1.04 so edges stay covered.
 - **Slow push** through a reaction shot: 1→1.06 linear across the shot.
@@ -188,6 +213,14 @@ the end card's hero a clean redraw of the prop with the lesson applied:
   gets a handwritten Caveat addition in coral: "+ good systems".
 - Notebook: "Grow what works" with the card's ideas, the wilted ones struck out
   (`scaleX` 0→1 coral bar) and the survivors circled.
+- Clothesline (laundry): a sagging rope path with three mint T-shirt SVGs (Invoices /
+  Follow-ups / Reports, "AUTO ✓") and a coral sock ("Laundry · still yours"). They drop onto
+  pegs 0.14 s apart (`y: -420`, `back.out(1.6)`) and settle with an elastic swing. Put the labels
+  *under* the clothes; inside a 230 px shirt they clip.
+
+Decorations that drift across an end card (blowing leaves, a shooting star drawn with a
+`pathLength` dash) go in a layer *below* the content: give `.scene-content` `z-index: 1`.
+Draw leaves as a simple oval with a vein; a spiky maple path reads as an asterisk at 90 px.
 
 ## 5. LED sign end card (`#cta`)
 

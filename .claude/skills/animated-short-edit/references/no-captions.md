@@ -69,6 +69,24 @@ The opposite also happens. If the aligner leaves a gap where the hypothesis hear
 start that caption at the hypothesis onset.
 A short filler before a line ("yeah" / "that's" before "Because…") that ties with nonsense
 can be left out of the caption. Mention it to the user.
+The aligner can also drag a reply back into the previous speaker's shot: "Write it down"
+aligned from 2.84 when the cat only starts talking at the 3.33 cut. Time those captions from
+the hypothesis onsets and the scene cut instead.
+
+**When nothing fits.** If every candidate for a stretch scores low (≈0.3–0.55) or fails to
+align:
+1. Re-run `transcribe.py` on a clip of just that stretch
+   (`ffmpeg -ss 7.3 -i v.mp4 -t 2.7 … seg.mp4`). A second hypothesis can surface the real
+   keyword ("…forgotten there", which pointed at "forget").
+2. Score in a tighter window that ends before laughter or music. A shared laugh in the final
+   wide dragged every candidate down.
+3. Respell out-of-vocabulary words after `|` (`overthinking` → `over thinking`).
+4. If still nothing clears ~0.6, choose the wording the scene implies, flag it as the
+   weakest line in VERIFY.md and in the reply, and offer to swap it once the user tells you
+   the real words.
+
+Unidentified short reactions at the very end (a laugh, "mm-hmm") can stay uncaptioned. Hold
+the previous caption to the cut instead.
 
 Say in VERIFY.md and to the user that the words are a corrected recognizer pass and
 need proofreading. You cannot hear the audio.

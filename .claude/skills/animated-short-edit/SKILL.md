@@ -37,7 +37,8 @@ loudness) plus `contact.jpg` and `events.jpg` (a labelled frame at every detecte
 Look at both images, then establish:
 
 - **Captions burned in?** If no frame shows a caption box (caption changes only echo
-  cuts or fire during camera motion), follow `references/no-captions.md`: rough
+  cuts or fire during camera motion; a steady 0.125 s rhythm is particle motion such as
+  falling leaves, not captions), follow `references/no-captions.md`: rough
   transcript with `scripts/transcribe.py`, correct it (rank doubtful lines with
   `scripts/score_candidates.py`), `scripts/align_captions.py` for
   word-timed caption clips, series logo bug, a written CTA. The rest of this workflow

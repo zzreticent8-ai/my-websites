@@ -48,6 +48,11 @@ Each of these cost a render cycle once. Check them before rendering.
   written from a tween's `onUpdate` are fine (deterministic for any seek).
 - In `fromTo` on SVG groups, put `svgOrigin` in **both** the from and to vars. Otherwise the
   first frame scales around the wrong point.
+- `svgOrigin` only applies to elements *inside* an SVG. To spin a whole `<svg>` icon, use
+  `transformOrigin: '50% 50%'`; with `svgOrigin` the ↻ icons wobbled off-centre.
+- An exit tween that ends exactly on another clip's `data-start` (the card state at 6.80, the
+  sparkles clip at 6.80) trips `gsap_exit_missing_hard_kill`. Add a `tl.set(…, {opacity: 0})`
+  just after it.
 
 ## Look
 - **Frame edge revealed by a prop push.** Translating the zoomed video toward a target
@@ -78,6 +83,9 @@ Each of these cost a render cycle once. Check them before rendering.
   `preserveAspectRatio="none"` (which also stretches strokes unevenly).
 - **Ring callouts struck through the word.** A ring sized to the whole column cut across
   "Capacity". Give the ring its own small box over the word (`preserveAspectRatio="none"` is fine there).
+- **Bubbles clipped by the card.** A "why?" bubble placed above its button (`top: -34px`)
+  was cut off by the card's `overflow: hidden`. Keep callouts inside the card, e.g. to the left
+  of the button.
 - **Stray end shots.** Two sources ended in an unrelated shot (a 3-frame neon tunnel; a single
   frame). Stop the video clip before that cut, end the edit before it and tell the user.
 - A chip's scale pop (1.1–1.12) briefly overlaps its neighbour in the chip row. It's
