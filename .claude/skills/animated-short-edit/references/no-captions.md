@@ -85,6 +85,14 @@ align:
    weakest line in VERIFY.md and in the reply, and offer to swap it once the user tells you
    the real words.
 
+**Fit the conversation, not just the score.** When the top scorer contradicts the next line
+("You really planned" followed by "I am."), take the best candidate that the reply answers
+("You're really planning.", 0.80 vs 0.90). Say which one scored higher in VERIFY.md.
+
+**Split long captions on word times.** A 36-character first line ("If my business disappeared
+tomorrow,") wrapped to two lines; split it at a word start from `words.json` ("If my business"
+/ "disappeared tomorrow,") so every caption stays on one line.
+
 Unidentified short reactions at the very end (a laugh, "mm-hmm") can stay uncaptioned. Hold
 the previous caption to the cut instead.
 

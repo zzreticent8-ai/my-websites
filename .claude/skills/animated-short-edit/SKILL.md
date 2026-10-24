@@ -37,8 +37,8 @@ loudness) plus `contact.jpg` and `events.jpg` (a labelled frame at every detecte
 Look at both images, then establish:
 
 - **Captions burned in?** If no frame shows a caption box (caption changes only echo
-  cuts or fire during camera motion; a steady 0.125 s rhythm is particle motion such as
-  falling leaves, not captions), follow `references/no-captions.md`: rough
+  cuts or fire during camera motion; a steady 0.125 s rhythm is particle motion or flicker,
+  such as falling leaves or a campfire, not captions), follow `references/no-captions.md`: rough
   transcript with `scripts/transcribe.py`, correct it (rank doubtful lines with
   `scripts/score_candidates.py`), `scripts/align_captions.py` for
   word-timed caption clips, series logo bug, a written CTA. The rest of this workflow
@@ -55,6 +55,11 @@ Look at both images, then establish:
 - **Keep-out zones:** faces in each shot, the burned caption band, the logo corner, and
   the shot's key subject or prop. When a character or prop fills the default card band
   or caption band, move that element for the video (see beat-library "Safe zones").
+- **Generator watermarks** (a small "AI" mark in a corner of Gemini clips): leave them
+  untouched, keep overlays off them and mention them in VERIFY.md and the reply.
+- **Props that can carry the metaphor:** real objects in the footage often hand you the
+  card's idea. The balloon's hanging sandbags became tasks as ballast, and the campfire
+  became "what survives if it all burns down".
 - **Callback props:** signs, screens, notebooks, cups with text in the world. A prop
   that already carries a message (a bus sign reading "NEXT STOP: NEW OPPORTUNITIES")
   makes the best bridge into the end card. If the last shot has no such prop (open

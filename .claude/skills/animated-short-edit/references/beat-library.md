@@ -110,11 +110,30 @@ booking request → "Booked ✓" → calendar filling; DM → auto-reply → inb
   blinking. A Save button sits beside it, and a coral "why?" bubble pops on the doubting
   line. Don't reveal text with a cover rectangle: on a translucent card the cover reads as a box.
 
+- **Ballast bags** (tasks weighing a balloon down): five SVG sandbags in absolute slots
+  ~102 px apart, labelled at 17 px, drop onto the card on "carrying everything" while an
+  altitude counter sinks (1,200 → 120 ft). On the reply naming them, each bag falls out
+  through the card's bottom edge (`y: 150, rotation: 25, opacity: 0`, 0.45 s `power2.in`; the
+  card's `overflow:hidden` clips it) with a soft whoosh (0.2), and the altitude climbs. The bag
+  that stays turns mint (`fill` tween on its body path).
+- **Everything fades but one** ("if my business disappeared, what would I need?"): the chips
+  shrink to 0.85 and fade to 18 % in a 0.1 s stagger, and the survivor lights mint on the question.
+- **Shield ring**: a `pathLength` circle draws around the icon tile on "protect", and the
+  system chips lock on staggered 0.15 s. Size the ring's radius to the tile (r ≈ tile/2 + 4) or
+  the rounded corners poke through.
+- **Badge pop** ("I'm a professional"): a gold radial-gradient "PRO" disc with a soft glow,
+  `scale 0.3 → 1, rotation -30 → 0`, `back.out(3)`, plus a rise SFX. It returns on the end card's
+  hero corner.
+
 ## 2. Camera moves (`#cam`, non-timed wrapper around the video)
 
 - **Punch-in** on a surprised line: scale 1→1.08 over 0.16 s `power3.out`, 4-step x
   shake of 8 px (`yoyo, repeat:3` ends at 0), settle to 1.04, slow drift to 1.07.
 - **Reset on the cut** back to the other character with `tl.set` at the scene-cut time.
+- **Weight and lift**: a slow `y: +14` sag across "carrying everything" makes the frame feel
+  heavy, and `y: -16` with the drift in the payoff shot reads as rising. Reset `y` at the next cut.
+- **Repeated shots**: a small helper keeps the camera block short:
+  `const shot = (o, t0, t1, s) => { tl.set('#cam', {scale: 1, x: 0, transformOrigin: …}, t0); tl.to('#cam', {scale: s, duration: t1 - t0, ease: 'none'}, t0); }`.
 - **Source camera already moving** (a pan from a close-up into a two-shot): keep `#cam` to
   a gentle 1→1.04 drift there; a punch-in would fight the move.
 - **Ride rumble** (roller coaster, vehicles): `tl.to('#cam', {y: 6, duration: 0.06, yoyo: true,
@@ -217,6 +236,13 @@ the end card's hero a clean redraw of the prop with the lesson applied:
   Follow-ups / Reports, "AUTO ✓") and a coral sock ("Laundry · still yours"). They drop onto
   pegs 0.14 s apart (`y: -420`, `back.out(1.6)`) and settle with an elastic swing. Put the labels
   *under* the clothes; inside a 230 px shirt they clip.
+
+- Hot-air balloon: a striped SVG balloon rises from below (`y: 360`, 0.9 s `power2.out`) and
+  bobs, while three labelled sandbags appear under the basket and fall off-screen in 0.9 s.
+  Hide them (`tl.set opacity 0`) before the question animates in, or they fall through the
+  text. Only a mint "Strategy ✓" tag stays, with an altitude badge beside it.
+- Embers: eight glowing dots rising 2,000 px over 3.2 s behind the hero on a fire-glow radial
+  background.
 
 Decorations that drift across an end card (blowing leaves, a shooting star drawn with a
 `pathLength` dash) go in a layer *below* the content: give `.scene-content` `z-index: 1`.
